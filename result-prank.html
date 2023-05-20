@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    html,body{
+        height: 100vh;
+        overflow: hidden;
+    }
+    nav{
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        align-items: center;
+        color: lightskyblue;
+        margin-top: 18px;
+        margin-bottom: 18px;
+        text-align: center;
+        font-size: 1.4rem;
+    }
+    nav hr{
+        width: 80vw;
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        width: 90vw;
+        margin-left: 5vw;
+        margin-bottom: 8px;
+    }
+    form h4{
+        margin-bottom: 10px;
+        color: rgb(233, 35, 35);
+    }
+    input{
+        width: 100%;
+        margin-top: 5px;
+        height: 25px;
+        
+    }
+    main p{
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+    .captcha{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .enter-capt{
+        width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: bisque;
+        padding: 5px;
+        border-radius: 5px;
+        margin-left: 17px;
+    }
+    .enter-capt input{
+        height: 18px;
+        
+    }
+    .buttons{
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+    }
+    .buttons button{
+        border: 1px solid black;
+        border-radius: 3px;
+        padding: 3px;
+        padding-left: 5px;
+        padding-right: 9px;
+        margin: 5px;
+    }
+    #failed{
+        display: none;
+        flex-direction: column;
+        font-size: 2.5rem;
+        color: rgb(223, 35, 35);
+        width: 100vw;
+        text-align: center;
+        margin-top: 150px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    footer{
+        position: absolute;
+        width: 100vw;
+        bottom: 0px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+</style>
+<body>
+    <nav>
+        <h2>West Bengal Board of Higher Secondary Education</h2>
+        <br>
+        <hr>
+    </nav>
+    <main>
+        <form>
+            <h4>Higher Secondary Exam(HSE) Results-year 2023</h4>
+            <label for="roll">Enter your Roll No</label>
+            <input type="text" id="roll" name="roll"/>
+            <label for="dob">Enter Date of Birth</label>
+            <input type="text" id="dob" name="dob"/>
+        </form>
+        <p>(Type Dob in dd/mm/yyyy format - for example Enter 01/02/2001 where Date of Birth is 1st February,2001)</p>
+        <div class="captcha">
+            <h2 id="capt-code">012345</h2>
+            <div class="enter-capt">
+                <h5>Enter Captcha</h5>
+                <input type="text" id="capt" onpaste="return true">
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="submit()">Submit</button>
+            <button>Reset</button>
+        </div>
+    </main>
+    <div id="failed">
+        Sorry!You are not Qualified <br>Try again next time
+    </div>
+    <footer>
+        <h3>Data provided by West Bengal Board of Higher Secondary Education</h3>
+    </footer>
+</body>
+<script>
+    let mainElm = document.getElementsByTagName("main")
+    let docCapt = document.getElementById("capt-code")
+    let inputCapt = document.getElementById("capt")
+    let roll = document.getElementById("roll")
+    let dob = document.getElementById("dob")
+    let failed = document.getElementById("failed")
+    let captCode = 0;
+
+    const getCaptcha = async() => {
+        captCode = await Math.floor(Math.random() * 999999)
+        if(captCode < 101111){
+            getCaptcha()
+        }else{
+            docCapt.innerHTML = captCode
+            navigator.clipboard.writeText(captCode);
+        }
+    }
+
+    const stringTodate = (date) => {
+        try{
+            let dateItems = date.split("/");
+            console.log(dateItems)
+            let newDate = new Date(parseInt(dateItems[2]),parseInt(dateItems[1])-1,parseInt(dateItems[0]))
+            if(newDate == "Invalid Date"){
+                return false
+            }else{
+                return true
+            }
+        }catch{
+            console.log(false)
+            return false
+        }
+    }
+
+    const countDown = () => {
+        console.log(localStorage.getItem("g"))
+        if(localStorage.getItem("left") == null){
+            localStorage.setItem("left",10)
+        }else{
+            localStorage.setItem("left",parseInt(localStorage.getItem("left")))
+        }
+        let int= setInterval(()=>{
+            localStorage.setItem("left",parseInt(localStorage.getItem("left"))-1)
+            if(parseInt(localStorage.getItem("left")) <= 0){
+                console.log("you are fooled")
+                localStorage.removeItem("left")
+                failed.innerHTML = "<img src='https://www.pngarts.com/files/11/Haha-Emoji-PNG-Image.png' width='300' />You are fooled"
+                failed.style.marginTop = "20px"
+                clearInterval(int)
+            }
+        },1000)
+    }
+
+    const pageDetact = () => {
+        let href = window.location.href
+        if(href.search("roll") == -1){
+            console.log("main page")
+        }else{
+            mainElm[0].style.display = "none"
+            failed.style.display = "flex"
+            countDown()
+        }
+    }
+
+    const submit = async() => {
+        console.log(dob.value)
+        if(captCode == parseInt(inputCapt.value) && (roll.value).length >9 && stringTodate(dob.value)){
+            await new Promise(res => setTimeout(res,2000))
+            window.location = `${window.location}?roll=${roll.value}`
+        }else{
+            alert("Wrong details or Empty fields")
+        }
+    }
+
+    pageDetact()
+    getCaptcha()
+
+
+</script>
+</html>
