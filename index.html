@@ -135,7 +135,7 @@
         </div>
         <div class="buttons">
             <button onclick="submit()">Submit</button>
-            <button>Reset</button>
+            <button onclick="reset()">Reset</button>
         </div>
     </main>
     <div id="failed">
@@ -217,6 +217,12 @@
         }else{
             alert("Wrong details or Empty fields")
         }
+    }
+
+    const reset = () => {
+        roll.value = ""
+        dob.value = ""
+        inputCapt.value = ""
     }
 
     pageDetact()
