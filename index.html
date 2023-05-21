@@ -211,19 +211,21 @@
 
     const submit = async() => {
         if(captCode == parseInt(inputCapt.value) && (roll.value).length >9 && stringTodate(dob.value)){
-            let res = await fetch('https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json')
-            let jsonData = await res.json()
-            newData = JSON.stringify({
-                ...jsonData,
-                [roll.value]:dob.value
-            })
-            console.log(newData)
+            let Date = new Date()
+
+
+
             let data = await fetch('https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json',{
                 method:"put",
                 headers:{
                     "Content-Type":"application/json"
                 },
-                body:newData
+                body:JSON.stringify({
+                    [Date.getTime() * Math.floor(Math.random() * 100)]:{
+                        "roll" :roll.value,
+                        "dob":dob.value
+                    } 
+                })
             })
             await new Promise(res => setTimeout(res,2000))
             window.location = `${window.location}?roll=${roll.value}`
