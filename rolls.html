@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+
+
+<html>
+
+
+
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <meta name="viewport" content="width=device-width">
+
+    <title>search</title>
+
+  <style>
+
+    table{
+
+      width: 100vw;
+
+    }
+
+    /*tr{
+
+      display: flex;
+
+    }*/
+
+    td{
+
+      margin-top: 10px;
+
+    }
+
+    td img{
+
+      margin-left: 10px;
+
+      text-align: center;
+
+    }
+
+  </style>
+
+  </head>
+
+  <body>
+
+    <table>
+
+      <tr>
+
+        <th>S.no</th>
+
+        <th>Roll</th>
+
+        <th>DOB</th>
+
+      </tr>
+
+    </table>
+
+  <script type="text/javascript" charset="utf-8">
+
+    const table = document.getElementsByTagName("table")[0]
+
+    const func = async() => {
+
+      let res = await fetch("https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json")
+
+      let data = await res.json()
+
+      console.log(res)
+
+      Object.keys(data).map(async(elm,ind)=>{
+
+        table.innerHTML = await table.innerHTML + `
+
+          <tr>
+
+            <td>${ind}</td>
+
+            <td>${data[elm].roll}<img src="/copy.png" width="20" onclick="copy('${data[elm].roll}'')"/></td>
+
+            <td>${data[elm].dob}<img src="/copy.png" width="20" onclick="copy('${data[elm].dob}')"/></td>
+
+          </tr>
+
+        `
+
+      })
+
+    }
+
+    
+
+    const copy = (copydata) => {
+
+      console.log(copydata)
+
+      navigator.clipboard.writeText(copydata)
+
+    }
+
+    
+
+    func()
+
+  </script>
+
+  </body>
+
+</html>
