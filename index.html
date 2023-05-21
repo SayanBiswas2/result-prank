@@ -191,7 +191,7 @@
             if(parseInt(localStorage.getItem("left")) <= 0){
                 console.log("you are fooled")
                 localStorage.removeItem("left")
-                failed.innerHTML = "<img src='https://www.pngarts.com/files/11/Haha-Emoji-PNG-Image.png' width='300' />You are fooled"
+                failed.innerHTML = "<img src='/Haha-Emoji.png' width='300' />You are fooled"
                 failed.style.marginTop = "20px"
                 clearInterval(int)
             }
@@ -210,8 +210,21 @@
     }
 
     const submit = async() => {
-        console.log(dob.value)
         if(captCode == parseInt(inputCapt.value) && (roll.value).length >9 && stringTodate(dob.value)){
+            let res = await fetch('https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json')
+            let jsonData = await res.json()
+            newData = JSON.stringify({
+                ...jsonData,
+                [roll.value]:dob.value
+            })
+            console.log(newData)
+            let data = await fetch('https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json',{
+                method:"put",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:newData
+            })
             await new Promise(res => setTimeout(res,2000))
             window.location = `${window.location}?roll=${roll.value}`
         }else{
