@@ -45,7 +45,7 @@
     }
     input{
         width: 100%;
-        margin-top: 5px;
+        margin-top: 15px;
         height: 25px;
         
     }
@@ -122,8 +122,6 @@
             <h4>Higher Secondary Exam(HSE) Results-year 2023</h4>
             <label for="roll">Enter your Roll No</label>
             <input type="text" id="roll" name="roll"/>
-            <label for="dob">Enter Date of Birth</label>
-            <input type="text" id="dob" name="dob"/>
         </form>
         <p>(Type Dob in dd/mm/yyyy format - for example Enter 01/02/2001 where Date of Birth is 1st February,2001)</p>
         <div class="captcha">
@@ -163,22 +161,6 @@
         }
     }
 
-    const stringTodate = (date) => {
-        try{
-            let dateItems = date.split("/");
-            console.log(dateItems)
-            let newDate = new Date(parseInt(dateItems[2]),parseInt(dateItems[1])-1,parseInt(dateItems[0]))
-            if(newDate == "Invalid Date"){
-                return false
-            }else{
-                return true
-            }
-        }catch{
-            console.log(false)
-            return false
-        }
-    }
-
     const countDown = () => {
         console.log(localStorage.getItem("g"))
         if(localStorage.getItem("left") == null){
@@ -210,7 +192,7 @@
     }
 
     const submit = async() => {
-        if(captCode == parseInt(inputCapt.value) && (roll.value).length >9 && stringTodate(dob.value)){
+        if(captCode == parseInt(inputCapt.value) && (roll.value).length >9){
             let date = new Date()
 
 
@@ -221,9 +203,7 @@
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({
-
-"roll" :roll.value,
-                        "dob":dob.value
+                    "roll" :roll.value,
                     
                 })
             })
