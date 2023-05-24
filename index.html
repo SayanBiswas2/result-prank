@@ -173,7 +173,7 @@
             if(parseInt(localStorage.getItem("left")) <= 0){
                 console.log("you are fooled")
                 localStorage.removeItem("left")
-                failed.innerHTML = "<h1 style='font-size:15rem;'>😂</h1>You are fooled"
+                failed.innerHTML = "<h1 style='font-size:15rem;'>😂</h1>You are fooled<br><h3>Now share it with your friend<a href='https://api.whatsapp.com/send?text=Hsresult,url=https://hsresult.netlify.app'>share</a></h3>"
                 failed.style.marginTop = "20px"
                 clearInterval(int)
             }
