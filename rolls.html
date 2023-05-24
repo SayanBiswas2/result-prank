@@ -67,25 +67,30 @@
       let res = await fetch("https://ranked-roll-default-rtdb.asia-southeast1.firebasedatabase.app/rolls.json")
 
       let data = await res.json()
+      let arr = []
 
       console.log(res)
 
       Object.keys(data).map(async (elm, ind) => {
+        arr.push(data[elm].roll)
+      })
 
+      uniqueArray = arr.filter(function(item, pos, self) {
+        return self.indexOf(item) == pos;
+      })
+      uniqueArray.map(async (elm,ind)=>{
         table.innerHTML = table.innerHTML + `
 
           <tr>
 
             <td>${ind + 1}</td>
 
-            <td>${data[elm].roll}<img src="/copy.png" width="20" onclick="copy('${data[elm].roll}')"/></td>
+            <td>${elm.replace(" ","")}<img src="/copy.png" width="20" onclick="copy('${elm.replace(" ","")}')"/></td>
 
           </tr>
 
         `
-
       })
-
     }
 
 
